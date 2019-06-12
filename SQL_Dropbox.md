@@ -2,7 +2,9 @@
 ###### Opgave 1: Maak een lijst met alle teams waarvan speler 27 de aanvoerder is.
 
 ```sql
-SELECT * FROM teams WHERE spelersnr = 27;
+SELECT * 
+FROM teams 
+WHERE spelersnr = 27;
 ``````
 
 
@@ -10,7 +12,9 @@ SELECT * FROM teams WHERE spelersnr = 27;
 ###### Opgave 2: Maak een lijst met alle mannelijke spelers.
 
 ```sql
-SELECT spelersnr, naam, jaartoe FROM spelers where geslacht LIKE 'M'
+SELECT spelersnr, naam, jaartoe 
+FROM spelers 
+Where geslacht LIKE 'M'
 ``````
 
 
@@ -32,7 +36,9 @@ ORDER BY datum
 ```sql
 SELECT wedstrijdnr, teamnr
 FROM wedstrijden
-WHERE teamnr = 1 AND gewonnen = 0 OR verloren = 0
+WHERE teamnr = 1 
+AND gewonnen = 0 
+OR verloren = 0
 ``````
 
 
@@ -99,7 +105,8 @@ ________________________________________________________________________________
 ```sql
 select wedstrijdnr, spelersnr, gewonnen as gewonnen_sets, verloren as verloren_sets
 from wedstrijden
-where teamnr = 2 and gewonnen > verloren and exists
+where teamnr = 2 
+and gewonnen > verloren and exists
 (select spelersnr from spelers);
 ``````
 
@@ -156,7 +163,8 @@ or (EXTRACT (YEAR from datum) = 1983))
 ```sql
 SELECT teams.spelersnr, naam, voorletters
 FROM teams, spelers
-WHERE geslacht = 'V' AND spelers.spelersnr = teams.spelersnr
+WHERE geslacht = 'V' 
+AND spelers.spelersnr = teams.spelersnr
 ``````
 
 
@@ -166,7 +174,9 @@ WHERE geslacht = 'V' AND spelers.spelersnr = teams.spelersnr
 ```sql
 select spelers.spelersnr, voorletters, naam, to_char(datum, 'DD/MM/YYYY') as boetedatum
 from spelers, boetes
-where plaats ilike 'Rijswijk' and (EXTRACT (year from datum)) = 1980 and boetes.spelersnr = spelers.spelersnr
+where plaats ilike 'Rijswijk' 
+and (EXTRACT (year from datum)) = 1980 
+and boetes.spelersnr = spelers.spelersnr
 order by spelersnr
 ``````
 
@@ -177,7 +187,8 @@ order by spelersnr
 ```sql
 select distinct spelers.spelersnr, (spelers.voorletters ||' ' || spelers.naam) as spelersnaam
 from spelers, wedstrijden
-where naam ilike '%E%' and spelers.spelersnr = wedstrijden.spelersnr
+where naam ilike '%E%' 
+and spelers.spelersnr = wedstrijden.spelersnr
 order by spelersnr
 ``````
 
@@ -214,9 +225,11 @@ Gebruik expliciete joins.
 
 ```sql
 select S.spelersnr, naam, datum, bedrag
-from boetes as B inner join spelers as S
-	on S.spelersnr = B.spelersnr
-where bedrag > 45.50 and S.plaats = 'Rijswijk'
+from 
+	boetes as B 
+inner join spelers as S ON S.spelersnr = B.spelersnr
+where bedrag > 45.50 
+and S.plaats = 'Rijswijk'
 order by S.spelersnr
 ``````
 
@@ -227,7 +240,8 @@ Sorteer op spelersnr aflopend.
 
 ```sql
 SELECT S.spelersnr, S.jaartoe, S.bondsnr, T.teamnr
-FROM spelers S
+FROM 
+	spelers S
 LEFT OUTER JOIN teams T
 ON S.spelersnr = T.spelersnr
 ORDER BY S.spelersnr DESC
@@ -235,9 +249,7 @@ ORDER BY S.spelersnr DESC
 
 
 
-###### Opgave 3: Geef voor alle spelers die bestuurslid zijn (of geweest zijn) een lijst van de wedstrijdnummers van alle wedstrijden die ze gespeeld hebben, en het verschil in sets waarmee ze gewonnen hebben.
-Bestuursleden zonder wedstrijd moeten ook in het resultaat voorkomen.
-Sorteer op bestuurslidfunctie (oplopend), verschil (aflopend), spelersnr (oplopend) en wedstrijdnr (oplopend)
+###### Opgave 3: Geef voor alle spelers die bestuurslid zijn (of geweest zijn) een lijst van de wedstrijdnummers van alle wedstrijden die ze gespeeld hebben, en het verschil in sets waarmee ze gewonnen hebben. Bestuursleden zonder wedstrijd moeten ook in het resultaat voorkomen. Sorteer op bestuurslidfunctie (oplopend), verschil (aflopend), spelersnr (oplopend) en wedstrijdnr (oplopend)
 
 ```sql
 select s.spelersnr, naam, functie, wedstrijdnr, gewonnen - verloren as verschil
@@ -245,20 +257,17 @@ from
 	spelers s 
 inner join bestuursleden
 	using(spelersnr)
-	--geef voor alle spelers die bestuurslid zijn (of geweest zijn)
+	
 
 left outer join wedstrijden w
 	using(spelersnr)
-	--een lijst van de wedstrijdnummers van alle wedstrijden die ze gespeeld hebben
-
+	
 order by functie asc, verschil desc, spelersnr asc, wedstrijdnr asc
 ``````
 
 
 
-###### Opgave 4: Geef voor alle vrouwelijke spelers die in Den Haag, Zoetermeer of Leiden wonen
-het spelersnummer, hun woonplaats en een lijst van de teams waarvoor ze ooit gespeeld hebben. 
-Sorteer op spelersnr
+###### Opgave 4: Geef voor alle vrouwelijke spelers die in Den Haag, Zoetermeer of Leiden wonen het spelersnummer, hun woonplaats en een lijst van de teams waarvoor ze ooit gespeeld hebben.  Sorteer op spelersnr
 
 ```sql
 select s.spelersnr, s.plaats, w.teamnr
@@ -281,15 +290,15 @@ XXXXX
 
 
 
-###### Opgave 6: Geef voor elke mannelijke speler wiens naam minstens 2 keer de letter 'e' bevat een lijst van de functies die hij op dit moment uitoefent.
-Ook mannelijke spelers zonder huidige functie moeten getoond worden.
-Sorteer op spelersnr.
+###### Opgave 6: Geef voor elke mannelijke speler wiens naam minstens 2 keer de letter 'e' bevat een lijst van de functies die hij op dit moment uitoefent. Ook mannelijke spelers zonder huidige functie moeten getoond worden. Sorteer op spelersnr.
 
 ```sql
 SELECT s.naam, s.geslacht, bs.functie
-FROM spelers AS s
+FROM 
+	spelers AS s
 LEFT OUTER JOIN bestuursleden AS bs ON bs.spelersnr = s.spelersnr AND bs.eind_datum IS NULL
-WHERE s.naam ilike '%e%e%' AND s.geslacht = 'M'
+WHERE s.naam ilike '%e%e%' 
+AND s.geslacht = 'M'
 ORDER BY s.spelersnr
 ``````
 
@@ -303,9 +312,7 @@ XXXXX
 
 
 
-###### Opgave 8: Geef voor alle huidige bestuurleden hun functie en de lijst van boetes die voor hen werd betaald.
-Omdat je dit wil vergelijken met de boetebedragen die betaald werden voor spelers die niet in het bestuur zitten,
-wil je deze boetebedragen ook opnemen in de tweede kolom van je resultaat. Sorteer je antwoord eerst op functie en daarna op het boetebedrag.
+###### Opgave 8: Geef voor alle huidige bestuurleden hun functie en de lijst van boetes die voor hen werd betaald. Omdat je dit wil vergelijken met de boetebedragen die betaald werden voor spelers die niet in het bestuur zitten, wil je deze boetebedragen ook opnemen in de tweede kolom van je resultaat. Sorteer je antwoord eerst op functie en daarna op het boetebedrag.
 
 ```sql
 XXX
@@ -321,19 +328,22 @@ from
 	spelers AS s
 left outer join boetes AS b ON s.spelersnr = b.spelersnr
 left outer join wedstrijden AS w ON s.spelersnr = w.spelersnr
+
 where plaats = 'Rijswijk'
 order by spelersnr asc, teamnr asc, bedrag asc
 ``````
 
 
 
-###### Opgave 10: Geef een lijst van alle spelers die nog geen wedstrijd gespeeld hebben.
-Sorteer op spelersnr
+###### Opgave 10: Geef een lijst van alle spelers die nog geen wedstrijd gespeeld hebben. Sorteer op spelersnr
 
 ```sql
 SELECT spelers.spelersnr, naam
-FROM spelers LEFT OUTER JOIN wedstrijden ON spelers.spelersnr = wedstrijden.spelersnr
-WHERE gewonnen IS NULL AND verloren IS NULL
+FROM 
+	spelers 
+LEFT OUTER JOIN wedstrijden ON spelers.spelersnr = wedstrijden.spelersnr
+WHERE gewonnen IS NULL 
+AND verloren IS NULL
 ORDER BY spelersnr
 ``````
 
@@ -341,21 +351,21 @@ ORDER BY spelersnr
 
 __________________________________________________________________________________________________________________
 ## JOINS 2
-###### Opgave 1: Geef alle spelers die geen boete gekregen hebben en niet in Den Haag wonen.
-Sorteer op jaar van toetreden.
+###### Opgave 1: Geef alle spelers die geen boete gekregen hebben en niet in Den Haag wonen. Sorteer op jaar van toetreden.
 
 ```sql
 select spelers.spelersnr, naam, plaats
-from spelers left outer join boetes
-	on spelers.spelersnr = boetes.spelersnr
-where plaats != 'Den Haag' and boetes.bedrag is null
+from 
+	spelers 
+left outer join boetes ON spelers.spelersnr = boetes.spelersnr
+where plaats != 'Den Haag' 
+and boetes.bedrag is null
 order by jaartoe
 ``````
 
 
 
-###### Opgave 2: Geef het spelersnummer en bondsnummer van alle spelers die jonger zijn dan de speler met bondsnummer 8467.
-Sorteer op spelersnr
+###### Opgave 2: Geef het spelersnummer en bondsnummer van alle spelers die jonger zijn dan de speler met bondsnummer 8467. Sorteer op spelersnr
 
 ```sql
 select s1.spelersnr, s1.bondsnr
@@ -366,18 +376,17 @@ and s1.geb_datum > s2.geb_datum
 
 
 
-###### Opgave 3: Geef een lijst van alle huidige bestuursleden die nog geen boete gekregen hebben, maar wel al minstens één wedstrijd verloren hebben.
-Sorteer op spelersnr en wedstrijdnr.
+###### Opgave 3: Geef een lijst van alle huidige bestuursleden die nog geen boete gekregen hebben, maar wel al minstens één wedstrijd verloren hebben. Sorteer op spelersnr en wedstrijdnr.
 
 ```sql
 SELECT S.spelersnr, naam, BS.functie, begin_datum, W.wedstrijdnr
-FROM bestuursleden BS JOIN spelers S
-ON BS.spelersnr = S.spelersnr
-JOIN wedstrijden W
-ON BS.spelersnr = W.spelersnr
+FROM 
+	bestuursleden BS 
+JOIN spelers S ON BS.spelersnr = S.spelersnr
+JOIN wedstrijden W ON BS.spelersnr = W.spelersnr
 AND verloren > gewonnen
-LEFT OUTER JOIN boetes B
-ON BS.spelersnr = B.spelersnr
+LEFT OUTER JOIN boetes B ON BS.spelersnr = B.spelersnr
+
 WHERE B.bedrag IS NULL
 AND eind_datum IS NULL
 ORDER BY S.spelersnr, W.wedstrijdnr
@@ -385,8 +394,7 @@ ORDER BY S.spelersnr, W.wedstrijdnr
 
 
 
-###### Opgave 4: Geef een lijst van alle mogelijke dubbelcombinaties tussen spelers onderling.
-Sorteer op "eerste speler" en vervolgens op "tweede speler".
+###### Opgave 4: Geef een lijst van alle mogelijke dubbelcombinaties tussen spelers onderling. Sorteer op "eerste speler" en vervolgens op "tweede speler".
 
 ```sql
 XXX
@@ -409,7 +417,8 @@ ________________________________________________________________________________
 ```sql
 SELECT DISTINCT k.vnaam ||' '|| k.naam AS "naam"
 FROM klanten k, deelnames d
-WHERE k.klantnr = d.klantnr AND d.reisnr IS NOT NULL
+WHERE k.klantnr = d.klantnr 
+AND d.reisnr IS NOT NULL
 ORDER BY naam
 ``````
 
@@ -419,7 +428,9 @@ ORDER BY naam
 
 ```sql
 select count(reisnr) AS aantal_reizen
-from klanten AS k inner join deelnames AS d ON k.klantnr = d.klantnr
+from 
+	klanten AS k 
+inner join deelnames AS d ON k.klantnr = d.klantnr
 where d.klantnr = 121
 ``````
 
@@ -511,7 +522,15 @@ ________________________________________________________________________________
 ###### Opgave 1: Welke reizigers hebben al meer dan 1 reis ondernomen waarvoor ze meer dan 2,5 miljoen euro moesten betalen? Sorteer op naam
 
 ```sql
+select k.naam, Count(r.reisnr) AS aantal_reizen
+from 
+	deelnames AS d
+inner join klanten AS k ON d.klantnr = k.klantnr
+inner join reizen AS r ON d.reisnr = r.reisnr and prijs > 2.5
 
+group by naam
+Having count(r.reisnr) > 1
+order by naam
 ``````
 
 
@@ -519,7 +538,14 @@ ________________________________________________________________________________
 ###### Opgave 2: Bereken voor de klant wiens naam begint met G en eindigt met s hoeveel hij in totaal al besteed heeft aan reizen.
 
 ```sql
+select k.naam, SUM(r.prijs) AS sum
+from 
+	klanten AS k
+inner join deelnames AS d ON k.klantnr = d.klantnr
+inner join reizen AS r ON d.reisnr = r.reisnr
 
+where k.naam ILIKE 'g%s'
+group by k.naam
 ``````
 
 
