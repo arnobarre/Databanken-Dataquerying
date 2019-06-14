@@ -696,10 +696,20 @@ ________________________________________________________________________________
 
 __________________________________________________________________________________________________________________
 # EXTRA OEFENING
-#### Opgave 10: Geef een lijst van alle planeten die minstens 1 satelliet hebben op een afstand groter dan 500km. Voor deze planeten toon je het aantal dergelijke satellieten. Geef ook een lijst van de andere planeten. Bij hen zet je als output: "Geen". Sorteer omgekeerd alfabetisch op planeetnaam.
+#### Opgave 1: Geef een lijst van alle planeten die minstens 1 satelliet hebben op een afstand groter dan 500km. Voor deze planeten toon je het aantal dergelijke satellieten. Geef ook een lijst van de andere planeten. Bij hen zet je als output: "Geen". Sorteer omgekeerd alfabetisch op planeetnaam.
 
 ```sql
-XXX
+select	planeet.objectnaam, 
+		case 
+			when count(sat.objectnaam) = 0 THEN 'Geen' 
+			else to_char(count(sat.objectnaam), '999') 
+		end AS "ver verwijderde satellieten"
+from 
+	hemelobjecten AS planeet 
+INNER JOIN hemelobjecten ster ON (planeet.satellietvan = ster.objectnaam AND ster.satellietvan is null)
+LEFT OUTER JOIN hemelobjecten sat ON (sat.satellietvan = planeet.objectnaam AND sat.afstand > 500)
+GROUP BY planeet.objectnaam
+ORDER BY planeet.objectnaam desc
 ``````
 
 
