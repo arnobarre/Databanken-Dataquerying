@@ -314,7 +314,13 @@ ORDER BY s.spelersnr
 ### Opgave 7: Geef een alfabetisch gesorteerde lijst van de namen van alle leden van de tennisvereniging die ofwel een recreatiespeler zijn (speelt geen wedstrijden) ofwel een wedstrijdspeler die nog geen wedstrijden gespeeld heeft.
 
 ```sql
-XXXXX
+SELECT S.naam
+FROM 
+	spelers S 
+LEFT OUTER JOIN wedstrijden W ON S.spelersnr = W.spelersnr
+WHERE W.gewonnen is null 
+AND W.verloren is null
+ORDER BY S.naam
 ``````
 
 
@@ -404,7 +410,10 @@ ORDER BY S.spelersnr, W.wedstrijdnr
 ### Opgave 4: Geef een lijst van alle mogelijke dubbelcombinaties tussen spelers onderling. Sorteer op "eerste speler" en vervolgens op "tweede speler".
 
 ```sql
-XXX
+select s1.voorletters || ' ' || s1.naam as "eerste speler", s2.voorletters || ' ' || s2.naam as "tweede speler"
+from spelers AS s1
+inner join spelers AS s2 ON s1.spelersnr <> s2.spelersnr
+order by "eerste speler", "tweede speler"
 ``````
 
 
@@ -574,7 +583,7 @@ order by deelnemers desc, reisnr asc
 ### Opgave 4: Welke reizen hebben exact drie verschillende hemelobjecten als reisdoel? Sorteer op reisnr.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -596,7 +605,7 @@ order by deelnemers desc, r.reisnr asc
 ### Opgave 6: Op welke planeten verblijft men gemiddeld langer dan 2 dagen? Sorteer op objectnaam.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -604,7 +613,7 @@ order by deelnemers desc, r.reisnr asc
 ### Opgave 7: Welke planeten met meer dan 7 manen worden bezocht (met of zonder verblijf)? Sorteer aflopend op basis van het aantal manen. Let erop dat je planeten die meerdere keren bezocht worden, niet dubbel telt.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -612,7 +621,7 @@ order by deelnemers desc, r.reisnr asc
 ### Opgave 8: Bereken voor alle hemelobjecten die satellieten hebben, het aantal satellieten per hemelobject. De lijst moet dalend gesorteerd worden op basis van het aantal satellieten van de hemelobjecten en daarna alfabetisch op basis van objectnaam.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -622,7 +631,7 @@ ________________________________________________________________________________
 ### Opgave 1: Geef de reizen met meer dan drie klanten. Sorteer op reisnr.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -630,7 +639,7 @@ ________________________________________________________________________________
 ### Opgave 2: Geef alle planeten (gesorteerd op afstand van de zon) en het aantal verschillende reizen die deze planeet bezocht hebben.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -638,7 +647,7 @@ ________________________________________________________________________________
 ### Opgave 3: Geef per klant het totaal aantal dagen dat deze klant in totaal op een planeet zal verblijven. Sorteer op klantnr.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -646,7 +655,7 @@ ________________________________________________________________________________
 ### Opgave 4: Sorteer de klanten aflopend op gemiddelde kostprijs per bezoek (totaalprijs van alle reizen per klant/totaal aantal dagen verblijf op een hemelobject), op twee cijfers na de komma afgerond, daarna op klantnr.
 
 ```sql
-
+XXX
 ``````
 
 
@@ -654,7 +663,7 @@ ________________________________________________________________________________
 ### Opgave 5: Geef de planeten en het aantal verschillende personen die hen bezocht hebben (met of zonder verblijf). Sorteer op objectnaam.
 
 ```sql
-
+XXX
 ``````
 
 
