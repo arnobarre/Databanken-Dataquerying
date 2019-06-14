@@ -599,7 +599,12 @@ order by deelnemers desc, reisnr asc
 #### Opgave 4: Welke reizen hebben exact drie verschillende hemelobjecten als reisdoel? Sorteer op reisnr.
 
 ```sql
-XXX
+select r.reisnr
+from  reizen AS r 
+inner join bezoeken b using(reisnr)
+group by r.reisnr
+having count(distinct b.objectnaam) = 3
+order by r.reisnr
 ``````
 
 
@@ -621,7 +626,13 @@ order by deelnemers desc, r.reisnr asc
 #### Opgave 6: Op welke planeten verblijft men gemiddeld langer dan 2 dagen? Sorteer op objectnaam.
 
 ```sql
-XXX
+select h1.objectnaam, AVG(b.verblijfsduur)
+from hemelobjecten h1 inner join hemelobjecten h2
+		ON h1.satellietvan = h2.objectnaam AND h2.satellietvan IS NULL
+		INNER JOIN bezoeken b
+		ON h1.objectnaam = b.objectnaam
+group by h1.objectnaam
+having avg(b.verblijfsduur) > 2
 ``````
 
 
@@ -629,7 +640,15 @@ XXX
 #### Opgave 7: Welke planeten met meer dan 7 manen worden bezocht (met of zonder verblijf)? Sorteer aflopend op basis van het aantal manen. Let erop dat je planeten die meerdere keren bezocht worden, niet dubbel telt.
 
 ```sql
-XXX
+select h2.objectnaam
+from
+	hemelobjecten AS h1 
+inner join hemelobjecten AS h2 ON h1.satellietvan = h2.objectnaam
+inner join hemelobjecten h3 ON h2.satellietvan = h3.objectnaam AND h3.satellietvan IS NULL
+inner join bezoeken b ON h2.objectnaam = b.objectnaam
+group by h2.objectnaam
+having count(distinct h1.objectnaam) > 7
+order by count(distinct h1.objectnaam) desc
 ``````
 
 
@@ -637,7 +656,12 @@ XXX
 #### Opgave 8: Bereken voor alle hemelobjecten die satellieten hebben, het aantal satellieten per hemelobject. De lijst moet dalend gesorteerd worden op basis van het aantal satellieten van de hemelobjecten en daarna alfabetisch op basis van objectnaam.
 
 ```sql
-XXX
+select h2.objectnaam, count(distinct h1.objectnaam)
+from
+	hemelobjecten AS h1
+inner join hemelobjecten h2 ON h1.satellietvan = h2.objectnaam
+group by h2.objectnaam
+order by count(distinct h1.objectnaam) desc, h2.objectnaam
 ``````
 
 
@@ -647,7 +671,7 @@ ________________________________________________________________________________
 #### Opgave 1: Geef de reizen met meer dan drie klanten. Sorteer op reisnr.
 
 ```sql
-XXX
+XXXXX
 ``````
 
 
@@ -655,7 +679,7 @@ XXX
 #### Opgave 2: Geef alle planeten (gesorteerd op afstand van de zon) en het aantal verschillende reizen die deze planeet bezocht hebben.
 
 ```sql
-XXX
+XXXXX
 ``````
 
 
@@ -663,7 +687,7 @@ XXX
 #### Opgave 3: Geef per klant het totaal aantal dagen dat deze klant in totaal op een planeet zal verblijven. Sorteer op klantnr.
 
 ```sql
-XXX
+XXXXX
 ``````
 
 
@@ -671,7 +695,7 @@ XXX
 #### Opgave 4: Sorteer de klanten aflopend op gemiddelde kostprijs per bezoek (totaalprijs van alle reizen per klant/totaal aantal dagen verblijf op een hemelobject), op twee cijfers na de komma afgerond, daarna op klantnr.
 
 ```sql
-XXX
+XXXXX
 ``````
 
 
@@ -679,18 +703,206 @@ XXX
 #### Opgave 5: Geef de planeten en het aantal verschillende personen die hen bezocht hebben (met of zonder verblijf). Sorteer op objectnaam.
 
 ```sql
-XXX
+XXXXX
 ``````
 
 
 
 __________________________________________________________________________________________________________________
 # BASIS EXTRA
+#### Opgave 1: Maak een lijst met alle spelers die in de jaren 60 geboren zijn. Doe dit met maar één WHERE-conditie (hint: BETWEEN).
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 2: Geef alle spelers die een wedstrijd met twee sets of meer verschil gewonnen of verloren hebben. Zorg voor de juiste output van de gegevens met onder andere vermelding van spelersnaam en eerste cijfer van het spelersnummer tussen haakjes. (gebruik hiervoor een CAST functie om het nummer om te zetten naar een CHAR(1))
+#### Sorteer op spelersnr en daarna op wedstrijdnr.
+#### Concateneer met ||.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 3: Geef alle spelers die in januari begonnen zijn met een bestuursfunctie.
+#### Sorteer op spelersnr en begindatum (de oorspronkelijke waarde).
+#### Belangrijk: de grotere gegevenset heeft wél bestuursleden die niet in januari begonnen zijn.
+
+#### Gebruik || ipv concat.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 4: Geef alle bestuursleden die geboren zijn voor 1970-08-05 en hun staat van dienst.
+#### Bekijk de output om de juiste formatering te zien.
+#### gebruik een combinatie van CASE, de || functie en datum opmaak.
+#### Sorteer op naam en begin datum
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 5: Geef een overzicht van alle spelers met een bondsnummer.
+#### Sorteer als volgt:
+#### - Eerst moeten alle spelers uit zoetermeer getoond worden, deze sorteer je op naam. (spelers met dezelfde naam uit zoetermeer worden gesorteerd op bondsnr)
+#### - Daarna de andere spelers, gesorteerd op bondsnr.
+
+#### Tip: je kan CASE ook gebruiken in de ORDER BY component (zet dan '0')
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 6: Geef voor alle bestuursleden een overzicht met hun naam, functie, de leeftijd die ze hadden op het moment van de start van hun functie en de leeftijd die ze hadden op het moment van het einde van hun functie.
+
+#### Tip: gebruik de postgresqlfuncties AGE en EXTRACT om het aantal jaar te krijgen. En CAST(...) as CHAR(2).
+
+#### (Dit is een moeilijke oefening)
+
+```sql
+XXXXX
+``````
 
 
 
 __________________________________________________________________________________________________________________
 # BASIS AgMT
+#### Opgave 1: Maak een lijst met alle spelers die niet in Zoetermeer wonen en die na 1980 zijn toegetreden tot de club.
+#### Zorg dat de jongste speler bovenaan staat
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 2: Geef een overzicht van alle spelers bestaande uit het spelersnummer, de naam en hun geboortejaar
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 3: We willen van alle boetes de volgende feiten weten: gemiddelde, kleinste boete en grootste boete. Elk afgerond op 2 cijfers na de komma.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 4: We willen een vereenvoudigd, geindexeerd overzicht van alles boetes.
+#### Boetes kleiner dan 25 worden weergegeven als "verwaarloosbaar" (tip: gebruik CASE), alle andere boetes moeten met 10% verhoogd worden. Geef voor elke boete ook de spelersnummer weer. 
+#### Merk op dat je in 1 kolom bedragen als Strings moet voorstellen, gebruik hiervoor to_char, met een formatering van 3 getallen.
+
+#### Je hoeft niet te sorteren.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 5: Geef de totale som van het aantal betaalde boetes en daarnaast ook het totale aantal boetes.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 6: Geef alle persoonnamen met een naam die meer dan 8 tekens telt
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 7: Tel hoeveel verschillende plaatsen er zijn.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 8: Selecteer de namen en geboortejaren van de drie oudste leden. Geef de volledige naam weer in 1 kolom zodat je eerst de voorletters hebt, vervolgens de voorvoegsels en tot slot de naam.
+#### TIP: gebruik || en LIMIT functie.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 9: Zoek het gemiddelde toetredingsjaar (geen kommagetal toegelaten, rond af naar beneden). Merk op dat het type van je resultaat numeric moet zijn (en niet decimal bv.).
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 10: Zoek de gemiddelde leeftijd in jaren in 2014 onafhankelijk van in welke maand de speler geboren is(geen kommagetal toegelaten, rond af naar boven)
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 11: Selecteer de naam van de spelers die Voorzitter geweest zijn, en de periode in 1 kolom. Sorteer van meest recent naar minst recent.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 12: Genereer 'mevrouw <naam>' of 'meneer <naam>' naargelang het geslacht. Deze string moet in een kolom groet steken. Toon alle mannen bij elkaar, en vervolgens alle vrouwen.
+Gebruik niet de concat() functie.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 13: Selecteer de namen van voorzitters en de periode (= begindatum streepje einddatum) waarin ze voorzitter waren (of nog steeds zijn) en op welke datum ze beboet zijn geweest.
+#### Gebruik ||.
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 14: Geef de namen van alle spelers waarin de letter e tweemaal voorkomt, maar geen 3 keer. Geef van elke speler ook zijn leeftijd in jaren. Sorteer op geboortedatum zodat de oudste speler eerst wordt getoond. TIP: gebruik AGE().
+
+```sql
+XXXXX
+``````
+
+
+
+#### Opgave 15: Geef een lijst van alle spelers die momenteel een bestuursfunctie uitoefenen. Geef van deze mensen de naam en hun functie. Sorteer zodanig dat eerst die speler wordt getoond die reeds het langst zijn/haar bestuursfunctie uitoefent
+
+```sql
+XXXXX
+``````
 
 
 
